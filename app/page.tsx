@@ -64,15 +64,22 @@ export default function HomePage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--background)" }}>
       <nav
-        className="flex items-center px-8 py-4 sticky top-0 z-10"
+        className="flex items-center justify-between px-4 sm:px-8 py-4 sticky top-0 z-10"
         style={{ background: "var(--background)", borderBottom: "1px solid var(--border)" }}
       >
         <span className="font-bold font-mono text-sm" style={{ color: "var(--accent)" }}>{"</>"}</span>
+        <a
+          href="https://freed-projects.vercel.app"
+          className="text-xs transition-opacity hover:opacity-70"
+          style={{ color: "var(--text-muted)" }}
+        >
+          ← Portfolio
+        </a>
       </nav>
 
-      <div className="max-w-2xl mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-6 sm:space-y-8">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "var(--foreground)" }}>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--foreground)" }}>
             Document Summarizer
           </h1>
           <p className="text-sm" style={{ color: "var(--text-muted)" }}>
@@ -86,7 +93,7 @@ export default function HomePage() {
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
-          className="flex flex-col items-center justify-center gap-3 rounded-xl p-10 cursor-pointer transition-all"
+          className="flex flex-col items-center justify-center gap-3 rounded-xl p-6 sm:p-10 cursor-pointer transition-all"
           style={{
             border: `2px dashed ${dragging ? "var(--accent)" : "var(--border)"}`,
             background: dragging ? "var(--accent-bg)" : "var(--surface)",
@@ -103,7 +110,10 @@ export default function HomePage() {
           ) : (
             <div className="text-center space-y-1">
               <p className="text-sm font-medium" style={{ color: "var(--foreground)" }}>
-                Drop your file here, or click to browse
+                <span className="hidden sm:inline">Drop your file here, or </span>
+                <span className="sm:hidden">Tap to </span>
+                <span className="sm:hidden">browse</span>
+                <span className="hidden sm:inline">click to browse</span>
               </p>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>
                 PDF, DOC, DOCX · max {MAX_MB} MB
