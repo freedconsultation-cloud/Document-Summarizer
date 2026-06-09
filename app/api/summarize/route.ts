@@ -3,9 +3,7 @@ import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 
 // CJS-only packages — kept external via serverExternalPackages in next.config.ts
-const { PDFParse } = require("pdf-parse") as {
-  PDFParse: new (opts: { data: Buffer }) => { load: () => Promise<void>; getText: () => Promise<{ text: string }> };
-};
+const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
 const mammoth = require("mammoth") as {
   extractRawText: (opts: { buffer: Buffer }) => Promise<{ value: string }>;
 };
@@ -17,9 +15,7 @@ async function extractText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) {
-    const parser = new PDFParse({ data: buffer });
-    await parser.load();
-    const result = await parser.getText();
+    const result = await pdfParse(buffer);
     return result.text;
   }
 
