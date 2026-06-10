@@ -1,30 +1,9 @@
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
-
-const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
-const mammoth = require("mammoth") as {
-  extractRawText: (opts: { buffer: Buffer }) => Promise<{ value: string }>;
-};
+import { extractText } from "@/lib/extract-text";
 
 export const maxDuration = 60;
-
-async function extractText(file: File): Promise<string> {
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const name = file.name.toLowerCase();
-
-  if (name.endsWith(".pdf")) {
-    const result = await pdfParse(buffer);
-    return result.text;
-  }
-
-  if (name.endsWith(".docx") || name.endsWith(".doc")) {
-    const result = await mammoth.extractRawText({ buffer });
-    return result.value;
-  }
-
-  throw new Error("Unsupported file type");
-}
 
 export async function POST(req: NextRequest) {
   const form = await req.formData();

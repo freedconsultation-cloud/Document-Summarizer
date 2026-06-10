@@ -2,12 +2,36 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 
-const ACCEPTED = ".pdf,.doc,.docx";
+const ACCEPTED = ".pdf,.doc,.docx,.pptx,.xlsx,.xls,.txt,.md,.csv";
 const MAX_MB = 10;
 
 interface QAEntry {
   question: string;
   answer: string;
+}
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <button
+      onClick={copy}
+      className="text-[11px] px-2 py-1 rounded transition-opacity hover:opacity-70 shrink-0"
+      style={{
+        background: "var(--surface)",
+        color: copied ? "#3fb950" : "var(--text-muted)",
+        border: "1px solid var(--border)",
+      }}
+    >
+      {copied ? "✓ Copied" : "Copy"}
+    </button>
+  );
 }
 
 export default function HomePage() {
@@ -148,7 +172,7 @@ export default function HomePage() {
               Document Summarizer
             </h1>
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-              Upload a PDF, DOC, or DOCX and get an instant AI summary. Then ask follow-up questions.
+              Upload a document and get an instant AI summary. Then ask follow-up questions.
             </p>
           </div>
 
@@ -179,7 +203,7 @@ export default function HomePage() {
                   <span className="sm:hidden">Tap to browse</span>
                 </p>
                 <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                  PDF, DOC, DOCX · max {MAX_MB} MB
+                  PDF, DOCX, PPTX, XLSX, TXT, MD, CSV · max {MAX_MB} MB
                 </p>
               </div>
             )}
@@ -209,6 +233,7 @@ export default function HomePage() {
                   Summary
                 </h2>
                 <div className="flex-1 h-px" style={{ background: "var(--border)" }} />
+                <CopyButton text={summary} />
               </div>
               <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "var(--foreground)" }}>
                 {summary}
@@ -244,9 +269,14 @@ export default function HomePage() {
                   </div>
                   <div className="px-4 sm:px-5 py-4" style={{ background: "var(--surface)" }}>
                     {entry.answer ? (
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "var(--foreground)" }}>
-                        {entry.answer}
-                      </p>
+                      <>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "var(--foreground)" }}>
+                            {entry.answer}
+                          </p>
+                          <CopyButton text={entry.answer} />
+                        </div>
+                      </>
                     ) : (
                       <div className="flex items-center gap-2">
                         <div
