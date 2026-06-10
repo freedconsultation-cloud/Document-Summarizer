@@ -156,7 +156,7 @@ export default function HomePage() {
       >
         <span className="font-bold font-mono text-sm" style={{ color: "var(--accent)" }}>{"</>"}</span>
         <a
-          href="https://freed-projects.vercel.app"
+          href="https://freedprojects.vercel.app"
           className="text-xs transition-opacity hover:opacity-70"
           style={{ color: "var(--text-muted)" }}
         >
